@@ -5,7 +5,7 @@
   "engines": {
     "node": "14.16.0",
     "npm": "6.14.11"
-},
+  },
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon app.js",
@@ -14,8 +14,11 @@
   "dependencies": {
     "blockly": "^6.20210701.0",
     "cookie-parser": "^1.4.5",
+    "debug": "^4.3.2",
     "ejs": "^2.6.2",
     "express": "^4.16.4",
+    "http": "0.0.1-security",
+    "http-error": "0.0.6",
     "morgan": "^1.9.1",
     "mysql": "^2.18.1",
     "mysql2": "^2.3.0",
