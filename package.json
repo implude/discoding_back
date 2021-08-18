@@ -1,13 +1,15 @@
 {
   "name": "discoding-backend",
   "version": "1.0.0",
-  "engines": {
-    "node": "14.16.0"
-  },
   "private": true,
+  "engines": {
+    "node": "14.16.0",
+    "npm": "6.14.11"
+},
   "scripts": {
     "start": "node ./bin/www",
-    "dev": "nodemon app.js"
+    "dev": "nodemon app.js",
+    "heroku-postbuild": "npm run build"
   },
   "dependencies": {
     "blockly": "^6.20210701.0",
