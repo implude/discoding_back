@@ -10,4 +10,4 @@ const db = require('../config/database.js');
 //         console.log(results)
 //     })
 // }
-
+module.exports = router;
