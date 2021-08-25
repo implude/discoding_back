@@ -3,8 +3,7 @@ const router = express.Router();
 
 router
 .get('/', function(req, res) { 
-    // res.render("../views/blookly") 
-    console.log('good')
+    res.render("../views/blookly") 
 })
 
 
