@@ -17,7 +17,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 app.use("/", require("./routes/index"));
 app.use("/account", require("./routes/account"));
-app.use("/test", require("./routes/bot"));
+app.use("/bot", require("./routes/bot"));
 
 app.listen(80, () => {
   console.log("running");

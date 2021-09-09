@@ -12,25 +12,27 @@
             margin: 0;
             padding: 0;
             height: 100vh;
-            width:100%;
+            width: 100%;
         }
 
         .main {
-            width:100%;
+            width: 100%;
             height: 100%;
         }
 
-        .middle{
-            height:100%;
-            width:100%;
+        .middle {
+            height: 100%;
+            width: 100%;
         }
-        #blocklyDiv{
-            width:100%;
-            height:100%;
+
+        #blocklyDiv {
+            width: 100%;
+            height: 100%;
         }
-        path{
-            bottom:0;
-            height:50%;
+
+        path {
+            bottom: 0;
+            height: 50%;
 
         }
     </style>
@@ -38,36 +40,36 @@
 
 <body>
     <div class="main">
-            <!-- 툴 박스 -->
-            <xml id="toolbox" style="display: none">
-                <category name="Logic" colour="210">
-                    <block type="logic_compare"></block>
-                    <block type="logic_operation"></block>
-                    <block type="logic_boolean"></block>
-                </category>
-                <category name="Loops" colour="120">
+        <!-- 툴 박스 -->
+        <xml id="toolbox" style="display: none">
+            <category name="Logic" colour="210">
+                <block type="logic_compare"></block>
+                <block type="logic_operation"></block>
+                <block type="logic_boolean"></block>
+            </category>
+            <category name="Loops" colour="120">
 
-                </category>
-                <category name="Math" colour="230">
+            </category>
+            <category name="Math" colour="230">
 
-                </category>
-                <category name="Colour" colour="20">
+            </category>
+            <category name="Colour" colour="20">
 
-                </category>
-                <category name="Functions" colour="290" custom="PROCEDURE">
+            </category>
+            <category name="Functions" colour="290" custom="PROCEDURE">
 
-                </category>
-            </xml>
-            <!-- 기본 div -->
-            <div id="blocklyDiv">
-                <script>
-                    var workspace = Blockly.inject('blocklyDiv',
-                        { toolbox: document.getElementById('toolbox') });
-                </script>
-            </div>
+            </category>
+        </xml>
+        <!-- 기본 div -->
+        <div id="blocklyDiv">
+            <script>
+                var workspace = Blockly.inject('blocklyDiv',
+                    { toolbox: document.getElementById('toolbox') });
+            </script>
+        </div>
     </div>
     <script>
-        
+
     </script>
 </body>
 
