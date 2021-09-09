@@ -5,33 +5,7 @@ const config = require("../routes/config");
 const crypto = require("crypto");
 
 router
-  //앱 시작했을때
-  .get("/online", (req, res) => {
-    let a = "discoding=";
-    for (let i = 0; i < 50; i++) {
-      let math = Math.floor((Math.random() + 1) * 65);
-      if (math >= 65 && math <= 90) {
-        a = String.fromCharCode(math) + a;
-      }
-    }
-    connect.query("SELECT * FROM user", (err, rows, fields) => {
-      for (let i = 0; i < rows.length; i++) {
-        if (rows[i].uuid == a) {
-          for (let i = 0; i < 50; i++) {
-            let math = Math.floor((Math.random() + 1) * 65);
-            if (math >= 65 && math <= 90) {
-              a = String.fromCharCode(math) + a;
-            }
-          }
-        } else {
-          res.send(JSON.stringify({
-            uuid: a,
-          }))
-        }
-      }
-    })
 
-  })
   //유저 토큰이 존재 X
   .get("/new", (req, res) => {
     let hashed_uuid = crypto.createHmac(config.crypto_key1, config.crypto_key2).update(req.body.uuid).digest("base64");
@@ -60,6 +34,7 @@ router
     }
     );
   });
+
 
 
 function get_bot_apply(uuid) {
