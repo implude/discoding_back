@@ -4,12 +4,16 @@ const connect = require("../config/database").connection;
 
 router
   .get('/', (req, res) => {
-    console.log('connection')
+    console.log('connection');
+    res.send(JSON.stringify({ msg: 'OK' }))
+  })
+  // .get('/member/:data1/:data2/:data3', (req, res) => {
+  //   res.send({ msg: 'OK' })
+  //   console.log(req.params.data1)
+  //   console.log(req.params.data2)
+  //   console.log(req.params.data3)
+  // })
 
-  })
-  .get("/block-coding", function (req, res) {
-    res.render("../views/blookly");
-  })
   //앱 시작했을때
   .get("/online", (req, res) => {
     let a = "discoding=";
@@ -35,6 +39,9 @@ router
         }
       }
     })
-
+  })
+  .get("/block-coding", function (req, res) {
+    res.render("../views/blookly");
   })
 module.exports = router;
+
