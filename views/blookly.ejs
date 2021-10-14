@@ -5,8 +5,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Title</title>
-    <!-- 블록 불러오는 js -->
+    <!-- 실행: npm run dev -->
     <script src="https://unpkg.com/blockly/blockly.min.js"></script>
+    <script>
+        Blockly.Blocks['discord_send'] = {
+        init: function() {
+            this.appendValueInput("NAME")
+                .setCheck("String")
+                .setAlign(Blockly.ALIGN_RIGHT)
+                .appendField("메시지 보내기");
+            this.setInputsInline(false);
+            this.setPreviousStatement(true, null);
+            this.setNextStatement(true, null);
+            this.setColour(240);
+        this.setTooltip("");
+        this.setHelpUrl("");
+        }
+    };
+    Blockly.JavaScript['discord_send'] = function(block) {
+    var value_name = Blockly.JavaScript.valueToCode(block, 'NAME', Blockly.JavaScript.ORDER_ATOMIC);
+    // TODO: Assemble JavaScript into code variable.
+    var code = `message.channel.send(${value_name})`;
+    return code;
+    };
+    </script>
     <style>
         body {
             margin: 0;
@@ -20,14 +42,21 @@
             height: 100%;
         }
 
-        .middle {
+        .middle  {
             height: 100%;
             width: 100%;
         }
 
         #blocklyDiv {
-            width: 100%;
+            width: 70%;
             height: 100%;
+            float:left;
+        }
+        #codeDiv {
+            width: 30%;
+            height: 100%;
+            float:right;
+            background: #000000
         }
 
         path {
@@ -42,23 +71,73 @@
     <div class="main">
         <!-- 툴 박스 -->
         <xml id="toolbox" style="display: none">
+            <category name="Discoding" colour="200">
+                <block type="discord_send"></block>
+            </category>
             <category name="Logic" colour="210">
+                <block type="controls_if"></block>
                 <block type="logic_compare"></block>
                 <block type="logic_operation"></block>
+                <block type="logic_negate"></block>
                 <block type="logic_boolean"></block>
-            </category>
-            <category name="Loops" colour="120">
+                <block type="logic_null"></block>
+              </category>
 
-            </category>
-            <category name="Math" colour="230">
+              <category name="Loops" colour="120">
+                <block type="controls_repeat_ext"></block>
+                <block type="controls_whileUntil"></block>
+                <block type="controls_flow_statements"></block>
+              </category>
 
-            </category>
-            <category name="Colour" colour="20">
+              <category name="Math" colour="230">
+                <block type="math_number"></block>
+                <block type="math_arithmetic"></block>
+                <block type="math_single"></block>
+                <block type="math_trig"></block>
+                <block type="math_constant"></block>
+                <block type="math_number_property"></block>
+                <block type="math_round"></block>
+                <block type="math_on_list"></block>
+                <block type="math_modulo"></block>
+                <block type="math_constrain"></block>
+                <block type="math_random_int"></block>
+                <block type="math_random_float"></block>
+              </category>
 
-            </category>
-            <category name="Functions" colour="290" custom="PROCEDURE">
+              <category name="Text" colour="160">
+                <block type="text"></block>
+                <block type="text_join"></block>
+                <block type="text_append"></block>
+                <block type="text_length"></block>
+                <block type="text_isEmpty"></block>
+                <block type="text_indexOf"></block>
+                <block type="text_charAt"></block>
+                <block type="text_getSubstring"></block>
+                <block type="text_changeCase"></block>
+                <block type="text_trim"></block>
+                <block type="text_print"></block>
+                <block type="text_prompt_ext"></block>
+              </category>
 
-            </category>
+              <category name="Lists" colour="260">
+                <block type="lists_create_with">
+                  <mutation items="0"></mutation> <!-- 이게뭐람 -->
+                </block>
+                <block type="lists_create_with"></block>
+                <block type="lists_repeat"></block>
+                <block type="lists_length"></block>
+                <block type="lists_isEmpty"></block>
+                <block type="lists_indexOf"></block>
+                <block type="lists_getIndex"></block>
+                <block type="lists_setIndex"> </block>
+                <block type="lists_getSublist"></block>
+                <block type="lists_split"></block>
+                <block type="lists_sort"></block>
+              </category>
+              
+              <sep></sep>
+              <category name="Variables" colour="330" custom="VARIABLE"></category>
+              <category name="Functions" colour="290" custom="PROCEDURE"></category>
         </xml>
         <!-- 기본 div -->
         <div id="blocklyDiv">
@@ -66,7 +145,22 @@
                 let workspace = Blockly.inject('blocklyDiv', { toolbox: document.getElementById('toolbox') });
             </script>
         </div>
+        <div id="codeDiv">
+            <script>
+                
+                document.write("code here".fontcolor("white")+"<br><br>")
+                var code = Blockly.JavaScript.workspaceToCode(workspace);
+                function livecodegen()
+                {
+                var code = Blockly.JavaScript.workspaceToCode(workspace);
+                document.getElementById("codeDiv").innerHTML=code.fontcolor("white")
+                setTimeout(livecodegen, 100);
+                };
+                livecodegen()
+            </script>
+        </div>
     </div>
+    
     <script>
 
     </script>
