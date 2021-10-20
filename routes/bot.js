@@ -53,9 +53,8 @@ router
 
   })
   .post('/hosting_page', (req, res) => {
-    let userid = req.body.userid
-    connect.query("SELECT * FROM user WHERE uuid = ?", [userid], (err, rows, fields) => {
-      console.log(userid)
+    let hashed_uuid = crypto.createHmac(config.crypto_key1, config.crypto_key2).update(req.body.userid).digest("base64");
+    connect.query("SELECT * FROM user WHERE uuid = ?", [hashed_uuid], (err, rows, fields) => {
       res.send(JSON.stringify({
         remaintime: rows[0].remain_time
       }))

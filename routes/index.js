@@ -12,24 +12,28 @@ router
   })
 
   .get('/online', (req, res) => {
-    let a = "=discoding";
-    for (let i = 0; i < 50; i++) {
+    let a = 0;
+    for (let i = 0; i < 20; i++) {
       let math = Math.floor((Math.random() + 1) * 65);
       if (math >= 65 && math <= 90) {
         a = String.fromCharCode(math) + a;
       }
     }
-
     res.send(JSON.stringify({ uuid: a }));
   })
 
 
   //유저 토큰이 존재 X
   .post("/new", (req, res) => {
-    console.log(req.body.UUID)
+
     let hashed_uuid = crypto.createHmac(config.crypto_key1, config.crypto_key2).update(req.body.UUID).digest("base64");
-    connect.query("INSERT INTO user(uuid, remain_time) VALUES (?, ?)", [hashed_uuid, 0], (err, rows, fields) => {
+    let info = [hashed_uuid, 0, 0]
+
+    connect.query("INSERT INTO user (uuid, remain_time,primary_key) VALUES(?,?,?)", info, (err, rows, fields) => {
       if (err) { res.send(JSON.stringify({ msg: "error" })) }
+      else {
+        res.send(JSON.stringify({ msg: 'good' }))
+      }
     }
     )
   })
@@ -39,7 +43,7 @@ router
     let des = []
     let img = []
     let hashed_uuid = crypto.createHmac(config.crypto_key1, config.crypto_key2).update(req.body.UUID).digest("base64");
-    console.log(hashed_uuid)
+    console.log('login', hashed_uuid)
     connect.query("SELECT * FROM created_bot where uuid=?", [hashed_uuid], (err, rows, fields) => {
       if (err) { res.send(JSON.stringify({ msg: "error" })) }
       else {
