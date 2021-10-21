@@ -28,7 +28,7 @@ router
 
     let hashed_uuid = crypto.createHmac(config.crypto_key1, config.crypto_key2).update(req.body.UUID).digest("base64");
     let info = [hashed_uuid, 0, 0]
-
+    console.log('new', info[0])
     connect.query("INSERT INTO user (uuid, remain_time,primary_key) VALUES(?,?,?)", info, (err, rows, fields) => {
       if (err) { res.send(JSON.stringify({ msg: "error" })) }
       else {
@@ -39,18 +39,18 @@ router
   })
   //유저 토큰이 존재 O
   .post("/login", (req, res) => {
-    let bot_name = []
-    let des = []
-    let img = []
+    let bot_name = ""
+    let des = ""
+    let img = ""
     let hashed_uuid = crypto.createHmac(config.crypto_key1, config.crypto_key2).update(req.body.UUID).digest("base64");
     console.log('login', hashed_uuid)
     connect.query("SELECT * FROM created_bot where uuid=?", [hashed_uuid], (err, rows, fields) => {
-      if (err) { res.send(JSON.stringify({ msg: "error" })) }
+      if (err) { console.log(err); res.send(JSON.stringify({ msg: "error" })) }
       else {
         for (let i = 0; i < rows.length; i++) {
-          bot_name.push(rows[i].bot_name)
-          des.push(rows[i].des)
-          img.push(rows[i].bot_img)
+          bot_name = bot_name + ' ' + rows[i].bot_name
+          des = des + ' ' + rows[i].des
+          img = img + ' ' + rows[i].bot_img
         }
         res.send(JSON.stringify({
           bot_name: bot_name,
@@ -60,6 +60,7 @@ router
       }
     })
   })
+
   //봇 시간 증가파트
   .get("/get-time", (req, res) => {
     let remain_time
