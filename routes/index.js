@@ -49,7 +49,7 @@ router
       else {
         for (let i = 0; i < rows.length; i++) {
           bot_name = bot_name + ' ' + rows[i].bot_name
-          des = des + ' ' + rows[i].des
+          des = des + '/' + rows[i].des
           img = img + ' ' + rows[i].bot_img
         }
         res.send(JSON.stringify({
