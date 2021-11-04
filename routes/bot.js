@@ -13,26 +13,6 @@ const vm = new NodeVM({
 });
 
 router
-  //봇 정보 불러오기
-  // .post('/bot_info', (req, res) => {
-  //   let info = [req.body.uuid]
-  //   console.log(info[0])
-  //   connect.query("SELECT * FROM created_bot WHERE uuid = ?", info, (err, rows, fields) => {
-  //     console.log(rows)
-  //     if (err) { console.log(err); res.send(JSON.stringify({ msg: err })) }
-  //     else {
-  //       for (let i = 0; i < rows.length; i++) {
-  //         res.send(JSON.stringify({
-  //           bot_name: rows[0].bot_name,
-  //           des: rows[0].des,
-  //           bot_id: rows[0].bot_id,
-  //           bot_img: rows[0].bot_img
-  //         }))
-  //       }
-  //     }
-  //   })
-  // })
-
   //봇 만들기
   .post('/create_bot', (req, res) => {
     connect.query("SELECT * FROM created_bot where bot_name = ?", [req.body.botName], (err, rows, fields) => {
@@ -82,5 +62,14 @@ router
     fs.readFile(`${name}`, 'utf-8', (err, data) => {
       vm.run(`${data}`, "vm.js");
     })
+  })
+  .post('/test_bot', (req, res) => {
+    console.log(req.body.code)
+
+    try {
+      vm.run(req.body.code, 'vm.js');
+    } catch (err) {
+      console.error('Failed to execute script.', err);
+    }
   })
 module.exports = router;

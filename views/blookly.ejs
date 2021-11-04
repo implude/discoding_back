@@ -5,83 +5,84 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Title</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <!-- 실행: npm run dev -->
     <script src="https://unpkg.com/blockly/blockly.min.js"></script>
     <script>
         Blockly.Blocks['discord_send'] = {
-        init: function() {
-            this.appendValueInput("NAME")
-                .setCheck("String")
-                .setAlign(Blockly.ALIGN_RIGHT)
-                .appendField("메시지 보내기");
-            this.setInputsInline(false);
-            this.setPreviousStatement(true, null);
-            this.setNextStatement(true, null);
-            this.setColour(240);
-        this.setTooltip("");
-        this.setHelpUrl("");
-        }
-    };
-    Blockly.JavaScript['discord_send'] = function(block) {
-    var value_name = Blockly.JavaScript.valueToCode(block, 'NAME', Blockly.JavaScript.ORDER_ATOMIC);
-    // TODO: Assemble JavaScript into code variable.
-    var code = `message.channel.send(${value_name})`;
-    return code;
-    };
+            init: function () {
+                this.appendValueInput("NAME")
+                    .setCheck("String")
+                    .setAlign(Blockly.ALIGN_RIGHT)
+                    .appendField("메시지 보내기");
+                this.setInputsInline(false);
+                this.setPreviousStatement(true, null);
+                this.setNextStatement(true, null);
+                this.setColour(240);
+                this.setTooltip("");
+                this.setHelpUrl("");
+            }
+        };
+        Blockly.JavaScript['discord_send'] = function (block) {
+            var value_name = Blockly.JavaScript.valueToCode(block, 'NAME', Blockly.JavaScript.ORDER_ATOMIC);
+            // TODO: Assemble JavaScript into code variable.
+            var code = `message.channel.send(${value_name})`;
+            return code;
+        };
 
-    Blockly.Blocks['event_test'] = {
-    init: function() {
-        this.appendDummyInput()
-            .appendField("메시지가 수신되었을 때");
-        this.appendDummyInput()
-            .appendField("메시지 변수 :")
-            .appendField(new Blockly.FieldVariable("message"), "NAME");
-        this.appendStatementInput("NAME")
-            .setCheck(null);
-        this.setColour(240);
-    this.setTooltip("");
-    this.setHelpUrl("");
-    }
-    };
-    Blockly.JavaScript['event_test'] = function(block) {
-    var variable_name = Blockly.JavaScript.nameDB_.getName(block.getFieldValue('NAME'), Blockly.Variables.NAME_TYPE);
-    var statements_name = Blockly.JavaScript.statementToCode(block, 'NAME');
-    // TODO: Assemble JavaScript into code variable.
-    var code = `client.on('message', (originalMessage) => {
+        Blockly.Blocks['event_test'] = {
+            init: function () {
+                this.appendDummyInput()
+                    .appendField("메시지가 수신되었을 때");
+                this.appendDummyInput()
+                    .appendField("메시지 변수 :")
+                    .appendField(new Blockly.FieldVariable("message"), "NAME");
+                this.appendStatementInput("NAME")
+                    .setCheck(null);
+                this.setColour(240);
+                this.setTooltip("");
+                this.setHelpUrl("");
+            }
+        };
+        Blockly.JavaScript['event_test'] = function (block) {
+            var variable_name = Blockly.JavaScript.nameDB_.getName(block.getFieldValue('NAME'), Blockly.Variables.NAME_TYPE);
+            var statements_name = Blockly.JavaScript.statementToCode(block, 'NAME');
+            // TODO: Assemble JavaScript into code variable.
+            var code = `client.on('message', (originalMessage) => {
         ${variable_name} = originalMessage.content 
         ${statements_name}
         });`
-    return code;
-    };
+            return code;
+        };
 
-    Blockly.Blocks['startswith'] = {
-    init: function() {
-        this.appendValueInput("first")
-            .setCheck(null)
-            .setAlign(Blockly.ALIGN_RIGHT)
-            .appendField("");
-        this.appendDummyInput()
-            .appendField("가");
-        this.appendValueInput("second")
-            .setCheck(null)
-            .setAlign(Blockly.ALIGN_RIGHT)
-            .appendField("");
-        this.appendDummyInput()
-            .appendField("로 시작하는가?");
-        this.setInputsInline(true);
-        this.setOutput(true, null);
-        this.setColour(240);
-    this.setTooltip("");
-    this.setHelpUrl("");
-    }
-    };
-    Blockly.JavaScript['startswith'] = function(block) {
-    var value_first = Blockly.JavaScript.valueToCode(block, 'first', Blockly.JavaScript.ORDER_ATOMIC);
-    var value_second = Blockly.JavaScript.valueToCode(block, 'second', Blockly.JavaScript.ORDER_ATOMIC);
-    // TODO: Assemble JavaScript into code variable.
-    var code = `${value_first}.startsWith(${value_second})`;
-    return [code, Blockly.JavaScript.ORDER_NONE];
-    };
+        Blockly.Blocks['startswith'] = {
+            init: function () {
+                this.appendValueInput("first")
+                    .setCheck(null)
+                    .setAlign(Blockly.ALIGN_RIGHT)
+                    .appendField("");
+                this.appendDummyInput()
+                    .appendField("가");
+                this.appendValueInput("second")
+                    .setCheck(null)
+                    .setAlign(Blockly.ALIGN_RIGHT)
+                    .appendField("");
+                this.appendDummyInput()
+                    .appendField("로 시작하는가?");
+                this.setInputsInline(true);
+                this.setOutput(true, null);
+                this.setColour(240);
+                this.setTooltip("");
+                this.setHelpUrl("");
+            }
+        };
+        Blockly.JavaScript['startswith'] = function (block) {
+            var value_first = Blockly.JavaScript.valueToCode(block, 'first', Blockly.JavaScript.ORDER_ATOMIC);
+            var value_second = Blockly.JavaScript.valueToCode(block, 'second', Blockly.JavaScript.ORDER_ATOMIC);
+            // TODO: Assemble JavaScript into code variable.
+            var code = `${value_first}.startsWith(${value_second})`;
+            return [code, Blockly.JavaScript.ORDER_NONE];
+        };
     </script>
     <style>
         body {
@@ -96,20 +97,21 @@
             height: 100%;
         }
 
-        .middle  {
+        .middle {
             height: 100%;
             width: 100%;
         }
 
         #blocklyDiv {
             width: 100%;
-            height: 70%;
-            float:up;
+            height: 65%;
+            float: up;
         }
+
         #codeDiv {
             width: 100%;
             height: 30%;
-            float:down;
+            float: down;
             background: #000000
         }
 
@@ -123,6 +125,20 @@
 
 <body>
     <div class="main">
+        <div style="height:5%; display: flex;
+        flex-direction: column; /*수직 정렬*/
+        align-items:flex-end;
+        justify-content: center;
+        padding-right: 10px;">
+            <div>
+                <a class="waves-effect waves-light btn"
+                    style="background-color: #5865F2; font-weight: bold; width:100px;height:40px;line-height: 40px;"
+                    id="test">Test</a>
+                <a class="waves-effect waves-light btn"
+                    style="background-color: #5865F2; font-weight: bold; width:100px;height:40px;line-height: 40px;"
+                    id="save">Save</a>
+            </div>
+        </div>
         <!-- 툴 박스 -->
         <xml id="toolbox" style="display: none">
             <category name="Discoding" colour="200">
@@ -136,15 +152,15 @@
                 <block type="logic_negate"></block>
                 <block type="logic_boolean"></block>
                 <block type="logic_null"></block>
-              </category>
+            </category>
 
-              <category name="Loops" colour="120">
+            <category name="Loops" colour="120">
                 <block type="controls_repeat_ext"></block>
                 <block type="controls_whileUntil"></block>
                 <block type="controls_flow_statements"></block>
-              </category>
+            </category>
 
-              <category name="Math" colour="230">
+            <category name="Math" colour="230">
                 <block type="math_number"></block>
                 <block type="math_arithmetic"></block>
                 <block type="math_single"></block>
@@ -157,9 +173,9 @@
                 <block type="math_constrain"></block>
                 <block type="math_random_int"></block>
                 <block type="math_random_float"></block>
-              </category>
+            </category>
 
-              <category name="Text" colour="160">
+            <category name="Text" colour="160">
                 <block type="text"></block>
                 <block type="startswith"></block>
                 <block type="text_join"></block>
@@ -173,11 +189,11 @@
                 <block type="text_trim"></block>
                 <block type="text_print"></block>
                 <block type="text_prompt_ext"></block>
-              </category>
+            </category>
 
-              <category name="Lists" colour="260">
+            <category name="Lists" colour="260">
                 <block type="lists_create_with">
-                  <mutation items="0"></mutation> <!-- 이게뭐람 -->
+                    <mutation items="0"></mutation> <!-- 이게뭐람 -->
                 </block>
                 <block type="lists_create_with"></block>
                 <block type="lists_repeat"></block>
@@ -189,11 +205,11 @@
                 <block type="lists_getSublist"></block>
                 <block type="lists_split"></block>
                 <block type="lists_sort"></block>
-              </category>
-              
-              <sep></sep>
-              <category name="Variables" colour="330" custom="VARIABLE"></category>
-              <category name="Functions" colour="290" custom="PROCEDURE"></category>
+            </category>
+
+            <sep></sep>
+            <category name="Variables" colour="330" custom="VARIABLE"></category>
+            <category name="Functions" colour="290" custom="PROCEDURE"></category>
         </xml>
         <!-- 기본 div -->
         <div id="blocklyDiv">
@@ -203,23 +219,40 @@
         </div>
         <div id="codeDiv">
             <script>
+                let jscode
                 document.write("code here".fontcolor("white"))
                 var code = Blockly.JavaScript.workspaceToCode(workspace);
-                function livecodegen()
-                {
-                var code = `const { Client, Intents } = require('discord.js'); 
+                function livecodegen() {
+                    code = `const { Client, Intents } = require('discord.js'); 
                 const client = new Client({ intents: [Intents.FLAGS.GUILDS] }); 
-                const token = 'OTAwMzY1Mzg0MTkwOTM1MDYw.YXAQmw.Yw3XfL5WHr_fO9SRpUDwk5_vaVQ' 
+                const token = 'OTAwMzY1Mzg0MTkwOTM1MDYw.YXAQmw.aQGTJqE4C5XDX9MJ79j0lKef-lY';
                 client.login(token); ` + Blockly.JavaScript.workspaceToCode(workspace);
-                document.getElementById("codeDiv").innerHTML=code.fontcolor("white")
-                };
+                    document.getElementById("codeDiv").innerHTML = code.fontcolor("white")
+                    jscode = code
+
+                }
                 workspace.addChangeListener(livecodegen);
             </script>
         </div>
     </div>
-    
-    <script>
 
+    <script>
+        let testbtn = document.getElementById("test")
+        let savebtn = document.getElementById("save")
+
+        testbtn.addEventListener('click', () => {
+            let xhr = new XMLHttpRequest()
+            xhr.open('POST', '/bot/test_bot');
+            xhr.setRequestHeader("Content-Type", "application/json")
+            xhr.onreadystatechange = () => {
+                if (xhr.status === 200 && xhr.readyState === 4) {
+                    console.log('good')
+                }
+            }
+            xhr.send(JSON.stringify({
+                code: jscode
+            }))
+        })
     </script>
 </body>
 
