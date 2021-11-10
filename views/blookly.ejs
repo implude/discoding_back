@@ -5,17 +5,70 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Title</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <!-- 실행: npm run dev -->
     <script src="https://unpkg.com/blockly/blockly.min.js"></script>
+    <!--이벤트,동작-->
     <script>
+
+        Blockly.Blocks['discord_edit'] = {
+            init: function () {
+                this.appendValueInput("message")
+                    .setCheck("Msg")
+                    .appendField("메시지:");
+                this.appendValueInput("edit")
+                    .setCheck("String")
+                    .appendField("를");
+                this.appendDummyInput()
+                    .appendField("로 수정하기");
+                this.setInputsInline(true);
+                this.setPreviousStatement(true, null);
+                this.setNextStatement(true, null);
+                this.setColour(240);
+                this.setTooltip("");
+                this.setHelpUrl("");
+            }
+        };
+        Blockly.JavaScript['discord_edit'] = function (block) {
+            var value_message = Blockly.JavaScript.valueToCode(block, 'message', Blockly.JavaScript.ORDER_ATOMIC);
+            var value_edit = Blockly.JavaScript.valueToCode(block, 'edit', Blockly.JavaScript.ORDER_ATOMIC);
+            // TODO: Assemble JavaScript into code variable.
+            var code = `${value_message}.edit(${value_edit})\n`;
+            return code;
+        };
+        Blockly.Blocks['discord_delete'] = {
+            init: function () {
+                this.appendValueInput("message")
+                    .setCheck("Msg")
+                    .appendField("메시지:");
+                this.appendDummyInput()
+                    .appendField("삭제하기");
+                this.setInputsInline(true);
+                this.setPreviousStatement(true, null);
+                this.setNextStatement(true, null);
+                this.setColour(240);
+                this.setTooltip("");
+                this.setHelpUrl("");
+            }
+        };
+        Blockly.JavaScript['discord_delete'] = function (block) {
+            var value_message = Blockly.JavaScript.valueToCode(block, 'message', Blockly.JavaScript.ORDER_ATOMIC);
+            // TODO: Assemble JavaScript into code variable.
+            var code = `${value_message}.delete()\n`;
+            return code;
+        };
         Blockly.Blocks['discord_send'] = {
             init: function () {
-                this.appendValueInput("NAME")
-                    .setCheck("String")
-                    .setAlign(Blockly.ALIGN_RIGHT)
-                    .appendField("메시지 보내기");
-                this.setInputsInline(false);
+                this.appendDummyInput()
+                    .appendField("채널:");
+                this.appendValueInput("channel")
+                    .setCheck("Channel");
+                this.appendDummyInput()
+                    .appendField("에 텍스트:");
+                this.appendValueInput("message")
+                    .setCheck("String");
+                this.appendDummyInput()
+                    .appendField("보내기");
+                this.setInputsInline(true);
                 this.setPreviousStatement(true, null);
                 this.setNextStatement(true, null);
                 this.setColour(240);
@@ -24,13 +77,14 @@
             }
         };
         Blockly.JavaScript['discord_send'] = function (block) {
-            var value_name = Blockly.JavaScript.valueToCode(block, 'NAME', Blockly.JavaScript.ORDER_ATOMIC);
+            var value_channel = Blockly.JavaScript.valueToCode(block, 'channel', Blockly.JavaScript.ORDER_ATOMIC);
+            var value_message = Blockly.JavaScript.valueToCode(block, 'message', Blockly.JavaScript.ORDER_ATOMIC);
             // TODO: Assemble JavaScript into code variable.
-            var code = `message.channel.send(${value_name})`;
+            var code = `client.channels.cache.get(${value_channel}.id).send(${value_message})`;
             return code;
         };
 
-        Blockly.Blocks['event_test'] = {
+        Blockly.Blocks['event_message'] = {
             init: function () {
                 this.appendDummyInput()
                     .appendField("메시지가 수신되었을 때");
@@ -38,49 +92,244 @@
                     .appendField("메시지 변수 :")
                     .appendField(new Blockly.FieldVariable("message"), "NAME");
                 this.appendStatementInput("NAME")
+                    .setCheck("");
+                this.setColour(240);
+                this.setTooltip("");
+                this.setHelpUrl("");
+            }
+        };
+        Blockly.JavaScript['event_message'] = function (block) {
+            var variable_name = Blockly.JavaScript.nameDB_.getName(block.getFieldValue('NAME'), Blockly.Variables.NAME_TYPE);
+            var statements_name = Blockly.JavaScript.statementToCode(block, 'NAME');
+            // TODO: Assemble JavaScript into code variable.
+            var code = `client.on('message', (message) => {
+    ${variable_name} = message
+    ${statements_name}
+    })\n`
+            return code;
+        };
+
+        Blockly.Blocks['event_ready'] = {
+            init: function () {
+                this.appendDummyInput()
+                    .appendField("봇 연결에 성공했을 때");
+                this.appendStatementInput("NAME")
                     .setCheck(null);
                 this.setColour(240);
                 this.setTooltip("");
                 this.setHelpUrl("");
             }
         };
-        Blockly.JavaScript['event_test'] = function (block) {
-            var variable_name = Blockly.JavaScript.nameDB_.getName(block.getFieldValue('NAME'), Blockly.Variables.NAME_TYPE);
+        Blockly.JavaScript['event_ready'] = function (block) {
             var statements_name = Blockly.JavaScript.statementToCode(block, 'NAME');
             // TODO: Assemble JavaScript into code variable.
-            var code = `client.on('message', (originalMessage) => {
-        ${variable_name} = originalMessage.content 
-        ${statements_name}
-        });`
+            var code = `client.on('ready', () => {
+    ${statements_name}
+    })\n`
             return code;
         };
 
-        Blockly.Blocks['startswith'] = {
+        Blockly.Blocks['event_memin'] = {
             init: function () {
-                this.appendValueInput("first")
-                    .setCheck(null)
-                    .setAlign(Blockly.ALIGN_RIGHT)
-                    .appendField("");
                 this.appendDummyInput()
-                    .appendField("가");
-                this.appendValueInput("second")
-                    .setCheck(null)
-                    .setAlign(Blockly.ALIGN_RIGHT)
-                    .appendField("");
+                    .appendField("멤버가 들어왔을 때");
                 this.appendDummyInput()
-                    .appendField("로 시작하는가?");
-                this.setInputsInline(true);
-                this.setOutput(true, null);
+                    .appendField("멤버 변수 :")
+                    .appendField(new Blockly.FieldVariable("memberin"), "NAME");
+                this.appendStatementInput("NAME")
+                    .setCheck(null);
                 this.setColour(240);
                 this.setTooltip("");
                 this.setHelpUrl("");
             }
         };
-        Blockly.JavaScript['startswith'] = function (block) {
-            var value_first = Blockly.JavaScript.valueToCode(block, 'first', Blockly.JavaScript.ORDER_ATOMIC);
-            var value_second = Blockly.JavaScript.valueToCode(block, 'second', Blockly.JavaScript.ORDER_ATOMIC);
+        Blockly.JavaScript['event_memin'] = function (block) {
+            var statements_name = Blockly.JavaScript.statementToCode(block, 'NAME');
             // TODO: Assemble JavaScript into code variable.
-            var code = `${value_first}.startsWith(${value_second})`;
+            var code = `client.on('guildMemberAdd', memberin => {
+    ${statements_name}
+    })\n`
+            return code;
+        };
+
+        Blockly.Blocks['event_memout'] = {
+            init: function () {
+                this.appendDummyInput()
+                    .appendField("멤버가 들어왔을 때");
+                this.appendDummyInput()
+                    .appendField("멤버 변수 :")
+                    .appendField(new Blockly.FieldVariable("memberout"), "NAME");
+                this.appendStatementInput("NAME")
+                    .setCheck(null);
+                this.setColour(240);
+                this.setTooltip("");
+                this.setHelpUrl("");
+            }
+        };
+        Blockly.JavaScript['event_memout'] = function (block) {
+            var statements_name = Blockly.JavaScript.statementToCode(block, 'NAME');
+            // TODO: Assemble JavaScript into code variable.
+            var code = `client.on('guildMemberAdd', memberout => {
+    ${statements_name}
+    })\n`
+            return code;
+        };
+
+    </script>
+    <!--값-->
+    <script>
+        Blockly.Blocks['prop_user'] = {
+            init: function () {
+                this.appendDummyInput()
+                    .appendField(new Blockly.FieldDropdown([["ID가", "id"], ["메시지", "msg"]]), "select");
+                this.appendValueInput("value")
+                    .setCheck(["String", "Msg"]);
+                this.appendDummyInput()
+                    .appendField(new Blockly.FieldLabelSerializable("유저"), "dyn_user")
+                this.setInputsInline(true);
+                this.setOutput(true, "User");
+                this.setColour(230);
+                this.setTooltip("");
+                this.setHelpUrl("");
+            }
+        };
+        Blockly.JavaScript['prop_user'] = function (block) {
+            var dropdown_select = block.getFieldValue('select');
+            var value_value = Blockly.JavaScript.valueToCode(block, 'value', Blockly.JavaScript.ORDER_ATOMIC);
+            // TODO: Assemble JavaScript into code variable.
+            if (dropdown_select == 'id') {
+                var code = `client.users.fetch(${value_value})`;
+                block.setFieldValue('를 가진 유저', 'dyn_user')
+            }
+            if (dropdown_select == 'msg') {
+                var code = `message.channel.messages.fetch(${value_value})`;
+                block.setFieldValue('를 가진 메시지', 'dyn_user')
+            }
+            // TODO: Change ORDER_NONE to the correct strength.
+            return [code, Blockly.JavaScript.ORDER_NONE];
+        };
+        Blockly.Blocks['prop_id'] = {
+            init: function () {
+                this.appendDummyInput()
+                    .appendField(new Blockly.FieldDropdown([["메시지", "msg"], ["사용자", "user"]]), "select");
+                this.appendValueInput("value")
+                    .setCheck(["User", "Message"]);
+                this.appendDummyInput()
+                    .appendField(new Blockly.FieldLabelSerializable("아이디"), "dyn_id")
+                this.setInputsInline(true);
+                this.setOutput(true, "String");
+                this.setColour(230);
+                this.setTooltip("");
+                this.setHelpUrl("");
+            }
+        };
+        Blockly.JavaScript['prop_id'] = function (block) {
+            var dropdown_select = block.getFieldValue('select');
+            var value_value = Blockly.JavaScript.valueToCode(block, 'value', Blockly.JavaScript.ORDER_ATOMIC);
+            // TODO: Assemble JavaScript into code variable.
+            if (dropdown_select == 'msg') {
+                var code = `${value_value}.id`;
+                block.setFieldValue('의 ID', 'dyn_id')
+            }
+            if (dropdown_select == 'user') {
+                var code = `${value_value}.id`;
+                block.setFieldValue('의 ID', 'dyn_id')
+            }
+            return [code, Blockly.JavaScript.ORDER_NONE];
+        };
+        Blockly.Blocks['prop_content'] = {
+            init: function () {
+                this.appendDummyInput()
+                    .appendField(new Blockly.FieldDropdown([["메시지", "msg"], ["사용자", "user"]]), "select");
+                this.appendValueInput("value")
+                    .setCheck(["Msg", "User"]);
+                this.appendDummyInput()
+                    .appendField(new Blockly.FieldLabelSerializable("내용"), 'dyn_content');
+                this.setInputsInline(true);
+                this.setOutput(true, "String");
+                this.setColour(230);
+                this.setTooltip("");
+                this.setHelpUrl("");
+            }
+        };
+        Blockly.JavaScript['prop_content'] = function (block) {
+            var dropdown_select = block.getFieldValue('select');
+            var value_value = Blockly.JavaScript.valueToCode(block, 'value', Blockly.JavaScript.ORDER_ATOMIC);
+            // TODO: Assemble JavaScript into code variable.
+            if (dropdown_select == 'msg') {
+                var code = `${value_value}.content`;
+                block.setFieldValue('의 내용', 'dyn_content')
+            }
+            if (dropdown_select == 'user') {
+                var code = `${value_value}.username`;
+                block.setFieldValue('의 닉네임', 'dyn_content')
+            }
+            // TODO: Change ORDER_NONE to the correct strength.
+            return [code, Blockly.JavaScript.ORDER_NONE];
+        };
+        Blockly.Blocks['prop_channel'] = {
+            init: function () {
+                this.appendDummyInput()
+                    .appendField(new Blockly.FieldDropdown([["메시지", "msg"], ["아이디", "id"]]), "select");
+                this.appendValueInput("value")
+                    .setCheck(["Msg", "String"]);
+                this.appendDummyInput()
+                    .appendField(new Blockly.FieldLabelSerializable("채널"), "dyn_channel");
+                this.setInputsInline(true);
+                this.setOutput(true, "Channel");
+                this.setColour(230);
+                this.setTooltip("");
+                this.setHelpUrl("");
+            }
+        };
+        Blockly.JavaScript['prop_channel'] = function (block) {
+            var dropdown_select = block.getFieldValue('select');
+            var value_value = Blockly.JavaScript.valueToCode(block, 'value', Blockly.JavaScript.ORDER_ATOMIC);
+            // TODO: Assemble JavaScript into code variable.
+            if (dropdown_select == 'id') {
+                var code = `${value_value}.id`;
+                block.setFieldValue('를 가진 채널', 'dyn_channel')
+            }
+            if (dropdown_select == 'msg') {
+                var code = `${value_value}.id`;
+                block.setFieldValue('를 받은 채널', 'dyn_channel')
+            }
+            return [code, Blockly.JavaScript.ORDER_NONE];
+        };
+        Blockly.Blocks['prop_msg'] = {
+            init: function () {
+                this.appendDummyInput()
+                    .appendField("채널");
+                this.appendValueInput("value")
+                    .setCheck("Channel");
+                this.appendDummyInput()
+                    .appendField(new Blockly.FieldDropdown([["에서 아이디", "id"], ["에서 아래서", "fromdown"]]), "value");
+                this.appendValueInput("value2")
+                    .setCheck(["String", "Number"]);
+                this.appendDummyInput()
+                    .appendField(new Blockly.FieldLabelSerializable("를 가진 메시지"), "dyn_msg");
+                this.setInputsInline(true);
+                this.setOutput(true, "Msg");
+                this.setColour(230);
+                this.setTooltip("");
+                this.setHelpUrl("");
+            }
+        };
+        Blockly.JavaScript['prop_msg'] = function (block) {
+            var value_value = Blockly.JavaScript.valueToCode(block, 'value', Blockly.JavaScript.ORDER_ATOMIC);
+            var dropdown_select = block.getFieldValue('value');
+            var value_value2 = Blockly.JavaScript.valueToCode(block, 'value2', Blockly.JavaScript.ORDER_ATOMIC);
+            // TODO: Assemble JavaScript into code variable.
+            var code = '...';
+            if (dropdown_select == 'id') {
+                var code = `${value_value}.messages.fetch(${value_value2})`;
+                block.setFieldValue('를 가진 메시지', 'dyn_msg')
+            }
+            if (dropdown_select == 'fromdown') {
+                var code = `await ${value_value}.messages.fetch({ limit: ${value_value2} }).last()`;
+                block.setFieldValue('번째 메시지', 'dyn_msg')
+            }
+            // TODO: Change ORDER_NONE to the correct strength.
             return [code, Blockly.JavaScript.ORDER_NONE];
         };
     </script>
@@ -103,15 +352,15 @@
         }
 
         #blocklyDiv {
-            width: 100%;
-            height: 65%;
-            float: up;
+            width: 80%;
+            height: 100%;
+            float: left;
         }
 
         #codeDiv {
-            width: 100%;
-            height: 30%;
-            float: down;
+            width: 20%;
+            height: 100%;
+            float: right;
             background: #000000
         }
 
@@ -124,28 +373,46 @@
 </head>
 
 <body>
+    <script>
+        function saveWorkspace() {
+            var xmlDom = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
+            var xmlText = Blockly.Xml.domToPrettyText(xmlDom);
+
+            localStorage.setItem("blockly.xml", xmlText);
+        }
+
+        function loadWorkspace() {
+            var xmlText = localStorage.getItem("blockly.xml");
+            if (xmlText) {
+                Blockly.mainWorkspace.clear();
+                xmlDom = Blockly.Xml.textToDom(xmlText);
+                Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xmlDom);
+            }
+        }
+    </script>
     <div class="main">
-        <div style="height:5%; display: flex;
-        flex-direction: column; /*수직 정렬*/
-        align-items:flex-end;
-        justify-content: center;
-        padding-right: 10px;">
-            <div>
-                <a class="waves-effect waves-light btn"
-                    style="background-color: #5865F2; font-weight: bold; width:100px;height:40px;line-height: 40px;"
-                    id="test">Test</a>
-                <a class="waves-effect waves-light btn"
-                    style="background-color: #5865F2; font-weight: bold; width:100px;height:40px;line-height: 40px;"
-                    id="save">Save</a>
-            </div>
-        </div>
         <!-- 툴 박스 -->
         <xml id="toolbox" style="display: none">
-            <category name="Discoding" colour="200">
-                <block type="discord_send"></block>
-                <block type="event_test"></block>
+            <category name="Event" colour="220" categorystyle="hat">
+                <block type="event_message"></block>
+                <block type="event_ready"></block>
+                <block type="event_memin"></block>
+                <block type="event_memout"></block>
             </category>
-            <category name="Logic" colour="210">
+            <category name="Act" colour="220">
+                <block type="discord_send"></block>
+                <block type="discord_edit"></block>
+                <block type="discord_delete"></block>
+            </category>
+            <category name="Properties" colour="220">
+                <block type="prop_user"></block>
+                <block type="prop_id"></block>
+                <block type="prop_content"></block>
+                <block type="prop_channel"></block>
+                <block type="prop_msg"></block>
+            </category>
+            <sep></sep>
+            <category name="Logic" colour="180">
                 <block type="controls_if"></block>
                 <block type="logic_compare"></block>
                 <block type="logic_operation"></block>
@@ -154,13 +421,13 @@
                 <block type="logic_null"></block>
             </category>
 
-            <category name="Loops" colour="120">
+            <category name="Loops" colour="60">
                 <block type="controls_repeat_ext"></block>
                 <block type="controls_whileUntil"></block>
                 <block type="controls_flow_statements"></block>
             </category>
 
-            <category name="Math" colour="230">
+            <category name="Math" colour="300">
                 <block type="math_number"></block>
                 <block type="math_arithmetic"></block>
                 <block type="math_single"></block>
@@ -206,53 +473,52 @@
                 <block type="lists_split"></block>
                 <block type="lists_sort"></block>
             </category>
-
-            <sep></sep>
             <category name="Variables" colour="330" custom="VARIABLE"></category>
             <category name="Functions" colour="290" custom="PROCEDURE"></category>
         </xml>
         <!-- 기본 div -->
         <div id="blocklyDiv">
             <script>
-                let workspace = Blockly.inject('blocklyDiv', { toolbox: document.getElementById('toolbox') });
+                let workspace = Blockly.inject('blocklyDiv', {
+                    toolbox: document.getElementById('toolbox'), zoom:
+                    {
+                        controls: false,
+                        wheel: true,
+                        startScale: 1.0,
+                        maxScale: 2,
+                        minScale: 0.2,
+                        scaleSpeed: 1.2,
+                        pinch: true
+                    },
+                    trashcan: false
+                });
+                loadWorkspace()
+                workspace.addChangeListener(saveWorkspace);
             </script>
         </div>
+        <button onclick="Copytest()">Copy text</button>
         <div id="codeDiv">
             <script>
-                let jscode
                 document.write("code here".fontcolor("white"))
                 var code = Blockly.JavaScript.workspaceToCode(workspace);
                 function livecodegen() {
-                    code = `const { Client, Intents } = require('discord.js'); 
-                const client = new Client({ intents: [Intents.FLAGS.GUILDS] }); 
-                const token = 'OTAwMzY1Mzg0MTkwOTM1MDYw.YXAQmw.aQGTJqE4C5XDX9MJ79j0lKef-lY';
-                client.login(token); ` + Blockly.JavaScript.workspaceToCode(workspace);
-                    document.getElementById("codeDiv").innerHTML = code.fontcolor("white")
-                    jscode = code
-
-                }
+                    var code = `const { Client, Intents } = require('discord.js');
+                const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
+                const token = 'OTAwMzY1Mzg0MTkwOTM1MDYw.YXAQmw.Yw3XfL5WHr_fO9SRpUDwk5_vaVQ'
+                client.login(token);\n` + Blockly.JavaScript.workspaceToCode(workspace);
+                    document.getElementById("codeDiv").innerHTML = code.replaceAll("\n", "<br>").fontcolor("white")
+                };
                 workspace.addChangeListener(livecodegen);
+                function Copytest() {
+                    navigator.clipboard.writeText(Blockly.JavaScript.workspaceToCode(workspace));
+                }
+
             </script>
         </div>
     </div>
 
     <script>
-        let testbtn = document.getElementById("test")
-        let savebtn = document.getElementById("save")
 
-        testbtn.addEventListener('click', () => {
-            let xhr = new XMLHttpRequest()
-            xhr.open('POST', '/bot/test_bot');
-            xhr.setRequestHeader("Content-Type", "application/json")
-            xhr.onreadystatechange = () => {
-                if (xhr.status === 200 && xhr.readyState === 4) {
-                    console.log('good')
-                }
-            }
-            xhr.send(JSON.stringify({
-                code: jscode
-            }))
-        })
     </script>
 </body>
 
