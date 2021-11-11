@@ -50,7 +50,7 @@ router
         for (let i = 0; i < rows.length; i++) {
           bot_name = bot_name + ' ' + rows[i].bot_name
           des = des + '/' + rows[i].des
-          img = img + ' ' + rows[i].bot_img
+          img = img + '/' + rows[i].bot_img
         }
         res.send(JSON.stringify({
           bot_name: bot_name,
@@ -74,7 +74,7 @@ router
     })
   })
   .get("/block-coding", function (req, res) {
-    res.render("../views/blookly");
+    res.render("../views/blookly", { bot_token: 'OTAwMzY1Mzg0MTkwOTM1MDYw.YXAQmw.-npNxzhkFInAUBflJ4CEZa10cGc' });
   })
 
 module.exports = router;

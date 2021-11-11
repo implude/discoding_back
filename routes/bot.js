@@ -7,6 +7,7 @@ const { NodeVM } = require('vm2');
 const fs = require("fs");
 
 const vm = new NodeVM({
+  timeout: 5000,
   require: {
     external: true
   }
@@ -15,6 +16,7 @@ const vm = new NodeVM({
 router
   //봇 만들기
   .post('/create_bot', (req, res) => {
+    console.log(req.body)
     connect.query("SELECT * FROM created_bot where bot_name = ?", [req.body.botName], (err, rows, fields) => {
       if (rows.length >= 1) { res.send(JSON.stringify({ msg: "봇 이름이 중복됩니다. 다른 이름으로 설정해주세요." })) }
       else {
@@ -63,13 +65,17 @@ router
       vm.run(`${data}`, "vm.js");
     })
   })
+  //test는 5초
   .post('/test_bot', (req, res) => {
-    console.log(req.body.code)
-
     try {
-      vm.run(req.body.code, 'vm.js');
+      vm.run(`${req.body.code}
+      setTimeout(() => {
+        console.log('good');
+        process.exit(1)
+      }, 5000);`, 'vm.js');
     } catch (err) {
       console.error('Failed to execute script.', err);
     }
   })
 module.exports = router;
+
