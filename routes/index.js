@@ -74,7 +74,7 @@ router
     })
   })
   .get("/block-coding", function (req, res) {
-    res.render("../views/blookly", { bot_token: 'OTAwMzY1Mzg0MTkwOTM1MDYw.YXAQmw.-npNxzhkFInAUBflJ4CEZa10cGc' });
+    res.render("../views/blookly", { bot_token: 'OTAwMzY1Mzg0MTkwOTM1MDYw.YXAQmw.WPGKgwPHjpxn1fkFE7FRCoJUHsw' });
   })
 
 module.exports = router;

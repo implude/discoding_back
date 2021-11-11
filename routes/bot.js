@@ -67,6 +67,7 @@ router
   })
   //test는 5초
   .post('/test_bot', (req, res) => {
+    console.log(req.body.code)
     try {
       vm.run(`${req.body.code}
       setTimeout(() => {
