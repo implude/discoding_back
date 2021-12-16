@@ -31,17 +31,18 @@ router
       }
     })
   })
+
   .post('/edit_bot', (req, res) => {
-    let sql = "SELECT * FROM created_bot WHERE uuid = ?"
-    connect.query(sql, [req.body.bot_name], (err, rows, fields) => {
+    console.log(req.body)
+    let sql = "UPDATE created_bot SET bot_name = ?, des = ? WHERE bot_name = ?"
+    connect.query(sql, [req.body.chname, req.body.des, req.body.name], (err, rows, fields) => {
       if (err) { console.log(err) }
       else res.send(JSON.stringify({
-        bot_name: rows[0].bot_name,
-        des: rows[0].des,
-        img: rows[0].bot_img
+        msg: "good"
       }))
     })
   })
+
   .post('/hosting_page', (req, res) => {
     let hashed_uuid = crypto.createHmac(config.crypto_key1, config.crypto_key2).update(req.body.userid).digest("base64");
     connect.query("SELECT * FROM user WHERE uuid = ?", [hashed_uuid], (err, rows, fields) => {
@@ -77,6 +78,14 @@ router
     } catch (err) {
       console.error('Failed to execute script.', err);
     }
+  })
+  .post('/delete_bot', (req, res) => {
+    console.log(req.body.name)
+    let sql = "DELETE FROM created_bot WHERE bot_name = ?"
+    connect.query(sql, [req.body.name], (err, rows, fields) => {
+      if (err) { res.send(JSON.stringify({ msg: "error" })); console.log(err) }
+      else { res.send(JSON.stringify({ msg: "good" })) }
+    })
   })
 module.exports = router;
 
