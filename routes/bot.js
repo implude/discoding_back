@@ -52,19 +52,21 @@ router
     })
   })
   //봇 호스팅하기 
-  .get('/hosting_bot', (req, res) => {
+  .post('/hosting_bot', (req, res) => {
+    console.log(req.body.code)
     let name = req.body.bot_name
-    let code = req.body.js_code
-    fs.writeFile(`./public/bot-codes/${name}`, code, (err) => {
-      if (err === null) {
-        console.log('success');
-      } else {
-        console.log('fail');
-      }
-    })
-    fs.readFile(`${name}`, 'utf-8', (err, data) => {
-      vm.run(`${data}`, "vm.js");
-    })
+    let code = req.body.code
+    // fs.writeFile(`./public/bot-codes/${name}`, code, (err) => {
+    //   if (err === null) {
+    //     console.log('success');
+    //   } else {
+    //     console.log('fail');
+    //   }
+    // })
+    // fs.readFile(`${name}`, 'utf-8', (err, data) => {
+    //   vm.run(`${data}`, "vm.js");
+    // })
+    vm.run(`${code}`, "vm.js");
   })
   //test는 5초
   .post('/test_bot', (req, res) => {
