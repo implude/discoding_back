@@ -1041,6 +1041,7 @@
         <script>
 
             let a
+            let b
             window.onload = () => {
                 let bot_name = prompt("봇 이름을 입력해주세요!(똑같이 해야합니다)")
                 a = bot_name
@@ -1058,10 +1059,8 @@
             let finish = document.getElementById('finish')
             finish.addEventListener("click", () => {
                 saveWorkspace(a)
-                var code = `const { Client, Intents } = require('discord.js');
-                            const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
-                            const token = 'OTAwMzY1Mzg0MTkwOTM1MDYw.YXAQmw.juFpP1gt_QPK_dbx3MuxU0irWi4';
-                            client.login(token);\n` + Blockly.JavaScript.workspaceToCode(workspace);
+                var code = b
+                b = code
                 let xhr = new XMLHttpRequest()
                 xhr.open("POST", "/bot/hosting_bot")
                 xhr.setRequestHeader("Content-Type", "application/json")
@@ -1080,10 +1079,7 @@
                 var elems = document.querySelectorAll('.modal');
                 var instances = M.Modal.init(elems);
 
-                var code = `const { Client, Intents } = require('discord.js');
-        const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
-        const token = 'OTAwMzY1Mzg0MTkwOTM1MDYw.YXAQmw.juFpP1gt_QPK_dbx3MuxU0irWi4';
-        client.login(token);\n` + Blockly.JavaScript.workspaceToCode(workspace);
+                var code = b
                 console.log(code)
                 document.getElementById('copy_code').innerHTML = code
             })
