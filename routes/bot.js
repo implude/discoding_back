@@ -34,8 +34,8 @@ router
 
   .post('/edit_bot', (req, res) => {
     console.log(req.body)
-    let sql = "UPDATE created_bot SET bot_name = ?, des = ? WHERE bot_name = ?"
-    connect.query(sql, [req.body.chname, req.body.des, req.body.name], (err, rows, fields) => {
+    let sql = "UPDATE created_bot SET bot_name = ?, des = ?, token=? WHERE bot_name = ?"
+    connect.query(sql, [req.body.chname, req.body.des, req.body.name, req.body.token], (err, rows, fields) => {
       if (err) { console.log(err) }
       else res.send(JSON.stringify({
         msg: "good"
@@ -57,7 +57,7 @@ router
     let name = req.body.bot_name
     let code = req.body.code
     // fs.writeFile(`./public/bot-codes/${name}`, code, (err) => {
-    //   if (err === null) {
+    //   if (err === null) {;
     //     console.log('success');
     //   } else {
     //     console.log('fail');
@@ -67,19 +67,6 @@ router
     //   vm.run(`${data}`, "vm.js");
     // })
     vm.run(`${code}`, "vm.js");
-  })
-  //test는 5초
-  .post('/test_bot', (req, res) => {
-    console.log(req.body.code)
-    try {
-      vm.run(`${req.body.code}
-      setTimeout(() => {
-        console.log('good');
-        process.exit(1)
-      }, 5000);`, 'vm.js');
-    } catch (err) {
-      console.error('Failed to execute script.', err);
-    }
   })
   .post('/delete_bot', (req, res) => {
     console.log(req.body.name)

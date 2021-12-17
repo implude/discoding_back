@@ -1087,7 +1087,6 @@
                 xhr.setRequestHeader("Content-Type", "application/json")
                 xhr.onreadystatechange = () => {
                     if (xhr.status === 200 && xhr.readyState === 4) {
-                        console.log(JSON.parse(xhr.responseText))
                         var elems = document.querySelectorAll('.modal');
                         var instances = M.Modal.init(elems);
                         var code = `const { Client, Intents } = require('discord.js');
