@@ -18,6 +18,6 @@ app.use("/", require("./routes/index"));
 app.use("/bot", require("./routes/bot"));
 app.use('/public', express.static(path.join(__dirname, '/public')));
 
-app.listen(80, () => {
+app.listen(8080, () => {
   console.log("running");
 });
