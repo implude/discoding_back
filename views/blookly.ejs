@@ -1087,20 +1087,19 @@
                 xhr.setRequestHeader("Content-Type", "application/json")
                 xhr.onreadystatechange = () => {
                     if (xhr.status === 200 && xhr.readyState === 4) {
-                        console.log(JSON.parse(xhr.responseText))
+                        var elems = document.querySelectorAll('.modal');
+                        var instances = M.Modal.init(elems);
+                        var code = `const { Client, Intents } = require('discord.js');
+                const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
+                const token = "${JSON.parse(xhr.responseText).token}";
+                client.login("${JSON.parse(xhr.responseText).token}");\n` + Blockly.JavaScript.workspaceToCode(workspace);
+                        document.getElementById('copy_code').innerHTML = code
                     }
                 }
                 xhr.send(JSON.stringify({
                     name: a
                 }));
-                var elems = document.querySelectorAll('.modal');
-                var instances = M.Modal.init(elems);
-                var code = `const { Client, Intents } = require('discord.js');
-                const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
-                const token = 'OTAwMzY1Mzg0MTkwOTM1MDYw.YXAQmw.juFpP1gt_QPK_dbx3MuxU0irWi4';
-                client.login(token);\n` + Blockly.JavaScript.workspaceToCode(workspace);
-                console.log(code)
-                document.getElementById('copy_code').innerHTML = code
+
             })
 
         </script>
