@@ -1,0 +1,24 @@
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <block type="event_ready" id="!9.-)5mBE*^M9W=5s-kT" x="41" y="199">
+    <statement name="NAME">
+      <block type="discord_send" id="#7Nz:tn#QGd.MA{JB5%Q">
+        <value name="channel">
+          <block type="prop_channel" id="[0r)j}U:r2S_6oeX=S0L">
+            <field name="select">id</field>
+            <field name="dyn_channel">를 가진 채널</field>
+            <value name="value">
+              <block type="text" id=":fnFDGfDc|8~)Z}]$n9p">
+                <field name="TEXT">895633817627406377</field>
+              </block>
+            </value>
+          </block>
+        </value>
+        <value name="message">
+          <block type="text" id="V.*?MqpA;J=[gd?3Ayqo">
+            <field name="TEXT">12321321</field>
+          </block>
+        </value>
+      </block>
+    </statement>
+  </block>
+</xml>

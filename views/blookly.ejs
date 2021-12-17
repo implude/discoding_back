@@ -627,18 +627,41 @@
         function saveWorkspace(name) {
             var xmlDom = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
             var xmlText = Blockly.Xml.domToPrettyText(xmlDom);
-
-            localStorage.setItem(`../public/bot-codes/${name}.xml`, xmlText);
+            let xhr = new XMLHttpRequest()
+            xhr.open("POST", "/bot/bot-save")
+            xhr.setRequestHeader("Content-Type", "application/json")
+            xhr.onreadystatechange = () => {
+                if (xhr.status === 200 && xhr.readyState === 4) {
+                    console.log(JSON.parse(xhr.responseText))
+                }
+            }
+            xhr.send(JSON.stringify({
+                code: xmlText,
+                name: name
+            }));
             console.log('good')
         }
 
         function loadWorkspace(name) {
-            var xmlText = localStorage.getItem(`../public/bot-codes/${name}.xml`);
-            if (xmlText) {
-                Blockly.mainWorkspace.clear();
-                xmlDom = Blockly.Xml.textToDom(xmlText);
-                Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xmlDom);
+            let xhr = new XMLHttpRequest()
+            xhr.open("POST", "/bot/bot-load")
+            xhr.setRequestHeader("Content-Type", "application/json")
+            xhr.onreadystatechange = () => {
+                if (xhr.status === 200 && xhr.readyState === 4) {
+                    var xmlText = JSON.parse(xhr.responseText).data;
+                    let token = JSON.parse(xhr.responseText).token;
+                    start(token)
+                    if (xmlText) {
+                        Blockly.mainWorkspace.clear();
+                        xmlDom = Blockly.Xml.textToDom(xmlText);
+                        Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xmlDom);
+                    }
+                    return token
+                }
             }
+            xhr.send(JSON.stringify({
+                name: name
+            }));
         }
 
     </script>
@@ -986,7 +1009,15 @@
         <!-- 기본 div -->
         <div id="blocklyDiv">
             <div style="height:50px; display: flex; justify-content: right; align-items: center;">
+                <a class="waves-effect waves-light btn modal-trigger" data-target="modal1" style="margin-right: 20px;"
+                    id="copy">복사</a>
                 <a class="waves-effect waves-light btn" id="finish">끝내기</a>
+            </div>
+            <div id="modal1" class="modal">
+                <div class="modal-content">
+                    <h4>Code</h4>
+                    <div id="copy_code"></div>
+                </div>
             </div>
             <script>
                 let workspace = Blockly.inject('blocklyDiv', {
@@ -1004,16 +1035,23 @@
                 });
             </script>
         </div>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.js"
+            integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
         <script>
+
             let a
             window.onload = () => {
                 let bot_name = prompt("봇 이름을 입력해주세요!(똑같이 해야합니다)")
                 a = bot_name
                 loadWorkspace(bot_name)
+            }
+            function start(token) {
                 var code = `const { Client, Intents } = require('discord.js');
-                const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
-                const token = 'OTAwMzY1Mzg0MTkwOTM1MDYw.YXAQmw.mJJOcKaZk1FfhtlYiYmztBWqEOU';
-                client.login(token);\n` + Blockly.JavaScript.workspaceToCode(workspace);
+                            const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
+                            const token = "${token}";
+                            client.login("${token}");\n` + Blockly.JavaScript.workspaceToCode(workspace);
+                console.log(code)
             }
 
 
@@ -1021,9 +1059,9 @@
             finish.addEventListener("click", () => {
                 saveWorkspace(a)
                 var code = `const { Client, Intents } = require('discord.js');
-                const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
-                const token = 'OTAwMzY1Mzg0MTkwOTM1MDYw.YXAQmw.mJJOcKaZk1FfhtlYiYmztBWqEOU';
-                client.login(token);\n` + Blockly.JavaScript.workspaceToCode(workspace);
+                            const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
+                            const token = 'OTAwMzY1Mzg0MTkwOTM1MDYw.YXAQmw.juFpP1gt_QPK_dbx3MuxU0irWi4';
+                            client.login(token);\n` + Blockly.JavaScript.workspaceToCode(workspace);
                 let xhr = new XMLHttpRequest()
                 xhr.open("POST", "/bot/hosting_bot")
                 xhr.setRequestHeader("Content-Type", "application/json")
@@ -1035,6 +1073,19 @@
                 xhr.send(JSON.stringify({
                     code: code
                 }));
+            })
+
+            let copy = document.getElementById('copy')
+            copy.addEventListener('click', () => {
+                var elems = document.querySelectorAll('.modal');
+                var instances = M.Modal.init(elems);
+
+                var code = `const { Client, Intents } = require('discord.js');
+        const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
+        const token = 'OTAwMzY1Mzg0MTkwOTM1MDYw.YXAQmw.juFpP1gt_QPK_dbx3MuxU0irWi4';
+        client.login(token);\n` + Blockly.JavaScript.workspaceToCode(workspace);
+                console.log(code)
+                document.getElementById('copy_code').innerHTML = code
             })
 
         </script>

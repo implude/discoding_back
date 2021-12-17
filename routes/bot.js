@@ -20,9 +20,9 @@ router
     connect.query("SELECT * FROM created_bot where bot_name = ?", [req.body.botName], (err, rows, fields) => {
       if (rows.length >= 1) { res.send(JSON.stringify({ msg: "봇 이름이 중복됩니다. 다른 이름으로 설정해주세요." })) }
       else {
-        let info = [crypto.createHmac(config.crypto_key1, config.crypto_key2).update(req.body.userid).digest("base64"), req.body.botName, req.body.description, req.body.img_url, 0]
+        let info = [crypto.createHmac(config.crypto_key1, config.crypto_key2).update(req.body.userid).digest("base64"), req.body.botName, req.body.description, req.body.img_url, req.body.token, 0]
         console.log('created_bot', info[0])
-        connect.query('INSERT INTO created_bot(uuid, bot_name, des, bot_img, num) VALUES (?, ?, ?, ?, ?)', info, (err, rows, fields) => {
+        connect.query('INSERT INTO created_bot(uuid, bot_name, des, bot_img,token, num) VALUES (?, ?, ?, ?, ?, ?)', info, (err, rows, fields) => {
           if (err) { console.log(err); res.send(JSON.stringify({ msg: 'error' })) }
           else {
             res.send(JSON.stringify({ msg: 'OK' }))
@@ -87,6 +87,28 @@ router
     connect.query(sql, [req.body.name], (err, rows, fields) => {
       if (err) { res.send(JSON.stringify({ msg: "error" })); console.log(err) }
       else { res.send(JSON.stringify({ msg: "good" })) }
+    })
+  })
+  .post('/bot-save', (req, res) => {
+    console.log(req.body)
+    fs.writeFile(`./public/bot-codes/${req.body.name}.xml`, req.body.code, (err) => {
+      if (err === null) {
+        console.log('success');
+      } else {
+        console.log('fail');
+      }
+    })
+  })
+  .post('/bot-load', (req, res) => {
+    console.log(req.body.name)
+    let sql = "SELECT * FROM created_bot WHERE bot_name = ?"
+    connect.query(sql, [req.body.name], (err, rows, fields) => {
+      fs.readFile(`./public/bot-codes/${req.body.name}.xml`, 'utf-8', (err, data) => {
+        res.send(JSON.stringify({
+          data: data,
+          token: rows[0].token
+        }))
+      })
     })
   })
 module.exports = router;
