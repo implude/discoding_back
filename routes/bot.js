@@ -120,7 +120,7 @@ router
   .post('/get_bot_token', (req, res) => {
     let sql = "SELECT * FROM created_bot WHERE bot_name = ?"
     connect.query(sql, [req.body.name], (err, rows, fields) => {
-      console.log(err)
+      console.log(rows)
       res.send(JSON.stringify({
         token: rows[0].token
       }))
