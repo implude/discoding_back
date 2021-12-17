@@ -91,6 +91,12 @@ router
   })
   .post('/bot-save', (req, res) => {
     console.log(req.body)
+    let sql = "SELECT * FROM created_bot WHERE bot_name = ?"
+    connect.query(sql, [req.body.name], (err, rows, fields) => {
+      res.send(JSON.stringify({
+        token: rows[0].token
+      }))
+    })
     fs.writeFile(`./public/bot-codes/${req.body.name}.xml`, req.body.code, (err) => {
       if (err === null) {
         console.log('success');
@@ -109,6 +115,14 @@ router
           token: rows[0].token
         }))
       })
+    })
+  })
+  .post('/get_bot_token', (req, res) => {
+    let sql = "SELECT * FROM created_bot WHERE bot_name = ?"
+    connect.query(sql, [req.body.name], (err, rows, fields) => {
+      res.send(JSON.stringify({
+        token: rows[0].token
+      }))
     })
   })
 module.exports = router;

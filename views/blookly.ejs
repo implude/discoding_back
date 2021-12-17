@@ -632,7 +632,7 @@
             xhr.setRequestHeader("Content-Type", "application/json")
             xhr.onreadystatechange = () => {
                 if (xhr.status === 200 && xhr.readyState === 4) {
-                    console.log(JSON.parse(xhr.responseText))
+                    next_finish(JSON.parse(xhr.responseText).token)
                 }
             }
             xhr.send(JSON.stringify({
@@ -1059,7 +1059,13 @@
             let finish = document.getElementById('finish')
             finish.addEventListener("click", () => {
                 saveWorkspace(a)
-                var code = b
+
+            })
+            function next_finish(token) {
+                var code = `const { Client, Intents } = require('discord.js');
+                            const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
+                            const token = "${token}";
+                            client.login("${token}");\n` + Blockly.JavaScript.workspaceToCode(workspace);
                 b = code
                 let xhr = new XMLHttpRequest()
                 xhr.open("POST", "/bot/hosting_bot")
@@ -1072,14 +1078,27 @@
                 xhr.send(JSON.stringify({
                     code: code
                 }));
-            })
+            }
 
             let copy = document.getElementById('copy')
             copy.addEventListener('click', () => {
+                let xhr = new XMLHttpRequest()
+                xhr.open("POST", "/bot/get_bot_token")
+                xhr.setRequestHeader("Content-Type", "application/json")
+                xhr.onreadystatechange = () => {
+                    if (xhr.status === 200 && xhr.readyState === 4) {
+                        console.log(JSON.parse(xhr.responseText))
+                    }
+                }
+                xhr.send(JSON.stringify({
+                    name: a
+                }));
                 var elems = document.querySelectorAll('.modal');
                 var instances = M.Modal.init(elems);
-
-                var code = b
+                var code = `const { Client, Intents } = require('discord.js');
+                const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
+                const token = 'OTAwMzY1Mzg0MTkwOTM1MDYw.YXAQmw.juFpP1gt_QPK_dbx3MuxU0irWi4';
+                client.login(token);\n` + Blockly.JavaScript.workspaceToCode(workspace);
                 console.log(code)
                 document.getElementById('copy_code').innerHTML = code
             })
