@@ -1040,7 +1040,10 @@
         <script src="https://code.jquery.com/jquery-3.6.0.js"
             integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
         <script>
-
+            document.addEventListener('DOMContentLoaded', function () {
+                var elems = document.querySelector('.modal');
+                var instances = M.Modal.init(elems);
+            });
             let a
             let b
             window.onload = () => {
@@ -1088,8 +1091,6 @@
                 xhr.setRequestHeader("Content-Type", "application/json")
                 xhr.onreadystatechange = () => {
                     if (xhr.status === 200 && xhr.readyState === 4) {
-                        var elems = document.querySelector('.modal');
-                        var instances = M.Modal.init(elems);
                         var code = `const { Client, Intents } = require('discord.js');
                 const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
                 const token = "${JSON.parse(xhr.responseText).token}";
