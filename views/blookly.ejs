@@ -597,28 +597,17 @@
             padding: 0;
             height: 100vh;
             width: 100%;
+            overflow: hidden
         }
 
         .main {
             width: 100%;
-            height: 100%;
-        }
-
-        .middle {
-            height: 100%;
-            width: 100%;
+            height: 100vh;
         }
 
         #blocklyDiv {
             width: 100%;
-            height: 100%;
-            float: left;
-        }
-
-        path {
-            bottom: 0;
-            height: 50%;
-
+            height: 80%;
         }
     </style>
 </head>
@@ -1009,7 +998,7 @@
         </xml>
         <!-- 기본 div -->
         <div id="blocklyDiv">
-            <div style="height:50px; display: flex; justify-content: right; align-items: center;">
+            <div style="height:40px; display: flex; justify-content: right; align-items: center;">
                 <a class="waves-effect waves-light btn modal-trigger" data-target="modal1" style="margin-right: 20px;"
                     id="copy">복사</a>
                 <a class="waves-effect waves-light btn" id="finish">끝내기</a>
@@ -1035,6 +1024,7 @@
                     trashcan: false
                 });
             </script>
+            <div style="width:100%;height:20%;background-color: black; color:white;" id="show_code"></div>
         </div>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
         <script src="https://code.jquery.com/jquery-3.6.0.js"
@@ -1056,7 +1046,7 @@
                             const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
                             const token = "${token}";
                             client.login("${token}");\n` + Blockly.JavaScript.workspaceToCode(workspace);
-                console.log(code)
+                document.getElementById('show_code').innerHTML = code
             }
 
 
