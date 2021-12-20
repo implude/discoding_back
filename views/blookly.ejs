@@ -1058,6 +1058,7 @@
                 xhr.setRequestHeader("Content-Type", "application/json")
                 xhr.onreadystatechange = () => {
                     if (xhr.status === 200 && xhr.readyState === 4) {
+                        console.log(xhr.responseText)
                         var code = `const { Client, Intents } = require('discord.js');
                 const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
                 const token = "${JSON.parse(xhr.responseText).token}";
