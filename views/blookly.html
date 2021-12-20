@@ -1041,6 +1041,9 @@
                 a = bot_name
                 loadWorkspace(bot_name)
             }
+            setInterval(() => {
+
+            }, 1000);
             function start(token) {
                 var code = `const { Client, Intents } = require('discord.js');
                             const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
@@ -1049,12 +1052,21 @@
                 document.getElementById('show_code').innerHTML = code
             }
             setInterval(() => {
-                var code = `const { Client, Intents } = require('discord.js');
-                            const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
-                            const token = "${token}";
-                            client.login("${token}");\n` + Blockly.JavaScript.workspaceToCode(workspace);
-                document.getElementById('show_code').innerHTML = code
-
+                let xhr = new XMLHttpRequest()
+                xhr.open("POST", "/bot/get_bot_token")
+                xhr.setRequestHeader("Content-Type", "application/json")
+                xhr.onreadystatechange = () => {
+                    if (xhr.status === 200 && xhr.readyState === 4) {
+                        var code = `const { Client, Intents } = require('discord.js');
+                const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
+                const token = "${JSON.parse(xhr.responseText).token}";
+                client.login("${JSON.parse(xhr.responseText).token}");\n` + Blockly.JavaScript.workspaceToCode(workspace);
+                        document.getElementById('show_code').innerHTML = code
+                    }
+                }
+                xhr.send(JSON.stringify({
+                    name: a
+                }));
             }, 1000);
 
             let finish = document.getElementById('finish')
