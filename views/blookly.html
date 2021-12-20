@@ -1048,12 +1048,18 @@
                             client.login("${token}");\n` + Blockly.JavaScript.workspaceToCode(workspace);
                 document.getElementById('show_code').innerHTML = code
             }
+            setInterval(() => {
+                var code = `const { Client, Intents } = require('discord.js');
+                            const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
+                            const token = "${token}";
+                            client.login("${token}");\n` + Blockly.JavaScript.workspaceToCode(workspace);
+                document.getElementById('show_code').innerHTML = code
 
+            }, 1000);
 
             let finish = document.getElementById('finish')
             finish.addEventListener("click", () => {
                 saveWorkspace(a)
-
             })
             function next_finish(token) {
                 var code = `const { Client, Intents } = require('discord.js');
